@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Quicksand:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Averia+Libre:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Cause:wght@100..900&family=Chango&family=Coiny&family=Comic+Neue:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Kurale&family=Londrina+Solid:wght@100;300;400;900&family=Oleo+Script:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <title>♡</title>
+
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        overflow: hidden;
+        background: #fff5f7;
+      }
+      canvas {
+        display: block;
+        width: 100vw;
+        height: 100vh;
+      }
+      h1 {
+        text-align: center;
+        font-family: "Great Vibes", cursive;
+        font-size: clamp(3rem, 12vw, 5rem);
+        font-weight: 400;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Ich liebe dich!</h1>
+    <canvas id="canvas"></canvas>
+    <script>
+      const canvas = document.getElementById("canvas");
+      const ctx = canvas.getContext("2d");
+
+      function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+
+      resizeCanvas();
+
+      window.addEventListener("resize", resizeCanvas);
+
+      // --------------------------------
+      // Herzen
+      // --------------------------------
+
+      const hearts = [];
+
+      function createHeart() {
+        hearts.push({
+          x: Math.random() * canvas.width,
+          y: canvas.height + 20,
+
+          size: Math.random() * 15 + 10,
+
+          speed: Math.random() * 1.5 + 0.5,
+
+          opacity: Math.random() * 0.5 + 0.3,
+
+          // Seitliche Bewegung
+          drift: Math.random() * 0.5 - 0.25,
+        });
+      }
+
+      // --------------------------------
+      // Herz zeichnen
+      // --------------------------------
+
+      function drawHeart(x, y, size, opacity) {
+        ctx.save();
+
+        ctx.translate(x, y);
+
+        ctx.scale(size / 20, size / 20);
+
+        ctx.globalAlpha = opacity;
+
+        ctx.fillStyle = "#e63946";
+
+        ctx.beginPath();
+
+        ctx.moveTo(0, 7);
+
+        ctx.bezierCurveTo(-15, -3, -10, -15, 0, -7);
+
+        ctx.bezierCurveTo(10, -15, 15, -3, 0, 7);
+
+        ctx.fill();
+
+        ctx.restore();
+      }
+
+      // --------------------------------
+      // Animation
+      // --------------------------------
+
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Neue Herzen erzeugen
+        if (Math.random() < 0.05) {
+          createHeart();
+        }
+
+        // Herzen bewegen
+        for (let i = hearts.length - 1; i >= 0; i--) {
+          const heart = hearts[i];
+
+          heart.y -= heart.speed;
+          heart.x += heart.drift;
+
+          drawHeart(heart.x, heart.y, heart.size, heart.opacity);
+
+          // Wenn Herz oben angekommen ist
+          if (heart.y < -30) {
+            hearts.splice(i, 1);
+          }
+        }
+
+        requestAnimationFrame(animate);
+      }
+
+      animate();
+    </script>
+  </body>
+</html>

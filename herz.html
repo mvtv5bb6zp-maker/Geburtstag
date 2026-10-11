@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Quicksand:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Averia+Libre:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Cause:wght@100..900&family=Chango&family=Coiny&family=Comic+Neue:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Kurale&family=Londrina+Solid:wght@100;300;400;900&family=Oleo+Script:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <title>♡</title>
+
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        overflow: hidden;
+
+        background: #fff5f7;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        min-height: 100vh;
+      }
+
+      canvas {
+        display: block;
+
+        width: 100vw;
+        height: 100vh;
+      }
+      .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+      }
+      h1 {
+        text-align: center;
+        font-family: "Great Vibes", cursive;
+        font-size: clamp(3rem, 12vw, 5rem);
+        font-weight: 400;
+      }
+      .text {
+        font-family: "Cause", cursive;
+        font-size: 20px;
+        text-align: center;
+        margin: 10px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <h1>ADSasdas</h1>
+      <canvas id="canvas"></canvas>
+    </div>
+    <script>
+      const canvas = document.getElementById("canvas");
+      const ctx = canvas.getContext("2d");
+
+      // ======================================
+      // CANVAS GRÖSSE
+      // ======================================
+
+      function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+
+      resizeCanvas();
+
+      window.addEventListener("resize", resizeCanvas);
+
+      // ======================================
+      // EINSTELLUNGEN
+      // ======================================
+
+      const particleCount = 500;
+
+      const particles = [];
+
+      let animationProgress = 0;
+
+      // ======================================
+      // HERZ-FUNKTION
+      // ======================================
+
+      function heartPosition(t) {
+        /*
+        Mathematische Herzform
+
+        x = 16 sin³(t)
+
+        y = 13 cos(t)
+            - 5 cos(2t)
+            - 2 cos(3t)
+            - cos(4t)
+    */
+
+        const x = 16 * Math.pow(Math.sin(t), 3);
+
+        const y =
+          13 * Math.cos(t) -
+          5 * Math.cos(2 * t) -
+          2 * Math.cos(3 * t) -
+          Math.cos(4 * t);
+
+        return {
+          x: x,
+          y: y,
+        };
+      }
+
+      // ======================================
+      // PARTIKEL ERSTELLEN
+      // ======================================
+
+      function createParticles() {
+        particles.length = 0;
+
+        for (let i = 0; i < particleCount; i++) {
+          // Zufälliger Punkt auf der Herzkurve
+
+          const t = Math.random() * Math.PI * 2;
+
+          const target = heartPosition(t);
+
+          // Herzgröße
+
+          const scale = Math.min(canvas.width, canvas.height) * 0.018;
+
+          const targetX = canvas.width / 2 + target.x * scale;
+
+          const targetY = canvas.height / 2 - target.y * scale;
+
+          // Zufälliger Startpunkt
+
+          const startX = Math.random() * canvas.width;
+
+          const startY = Math.random() * canvas.height;
+
+          particles.push({
+            x: startX,
+            y: startY,
+
+            targetX: targetX,
+            targetY: targetY,
+
+            size: Math.random() * 2.5 + 1,
+
+            speed: Math.random() * 0.5 + 0.5,
+
+            delay: Math.random() * 0.5,
+          });
+        }
+      }
+
+      createParticles();
+
+      // ======================================
+      // SMOOTHING
+      // ======================================
+
+      function easeOutCubic(t) {
+        return 1 - Math.pow(1 - t, 3);
+      }
+
+      // ======================================
+      // PARTIKEL ZEICHNEN
+      // ======================================
+
+      function drawParticle(particle) {
+        ctx.beginPath();
+
+        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+
+        ctx.fillStyle = "rgba(230, 57, 70, 0.8)";
+
+        ctx.fill();
+      }
+
+      // ======================================
+      // ANIMATION
+      // ======================================
+
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        animationProgress += 0.003;
+
+        for (const particle of particles) {
+          // --------------------------------
+          // Partikel-Animation
+          // --------------------------------
+
+          let progress = animationProgress - particle.delay;
+
+          progress = Math.max(0, Math.min(progress, 1));
+
+          progress = easeOutCubic(progress);
+
+          // --------------------------------
+          // Zum Ziel bewegen
+          // --------------------------------
+
+          particle.x =
+            particle.x + (particle.targetX - particle.x) * progress * 0.08;
+
+          particle.y =
+            particle.y + (particle.targetY - particle.y) * progress * 0.08;
+
+          // --------------------------------
+          // Leichte Bewegung
+          // --------------------------------
+
+          if (animationProgress > 1) {
+            particle.x +=
+              Math.sin(Date.now() * 0.001 + particle.targetX) * 0.05;
+
+            particle.y +=
+              Math.cos(Date.now() * 0.001 + particle.targetY) * 0.05;
+          }
+
+          drawParticle(particle);
+        }
+
+        requestAnimationFrame(animate);
+      }
+
+      animate();
+    </script>
+  </body>
+</html>

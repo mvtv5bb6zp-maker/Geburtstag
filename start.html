@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Quicksand:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Averia+Libre:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Cause:wght@100..900&family=Chango&family=Coiny&family=Comic+Neue:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Kurale&family=Londrina+Solid:wght@100;300;400;900&family=Oleo+Script:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: #fff5f7;
+            font-family: "Cause", cursive;
+        }
+        canvas {
+            width: min(80vw, 350px);
+            height: min(80vw, 350px);
+            display: block;
+        }
+        #container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        h1 {
+            text-align: center;
+            font-family: "Great Vibes", cursive;
+            font-size: clamp(3rem, 12vw, 5rem);
+            font-weight: 400;
+        }
+        .text {
+            font-family: "Cause", cursive;
+            font-size: 20px;
+            text-align: center;
+            margin: 10px;
+        }
+        .btn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        button {
+            text-align: center;
+            margin: 10px;
+            font-family: "Cause", cursive;
+            font-size: 20px;
+            padding: 10px;
+            padding-right: 30px;
+            padding-left: 30px;
+            background: #e63946;
+            border-width: 5px;
+            border-color: #e63946;
+            border-radius: 10%;
+            color: white;
+        }
+    </style>
+    <title>♡</title>
+</head>
+
+<body>
+    <header>
+        <h1>Liebe Emily,</h1>
+    </header>
+    <div id="container">
+        <canvas id="canvas" width="500" height="500"></canvas>
+    </div>
+    <br>
+    <div class="text">
+        Ich möchte dir sagen:
+    </div>
+    <div class="text" id="t1" style="display: none;">
+        Ich hab dich lieb!
+    </div>
+    <div class="text" id="t2" style="display: none;">
+        Ich hab dich sehr lieb!
+    </div>
+    <div class="text" id="t3" style="display: none;">
+        Ich hab dich ganz dolle lieb!
+    </div>
+    <div class="text" id="t4" style="display: none;">
+        Ich hab dich unglaublich dolle lieb!
+    </div>
+    <div class="btn">
+        <button id="btn" onclick="next()">➔</button>
+    </div>
+    <div class="btn">
+        <button style="display: none;" id="final_btn" onclick="next_page()">➔ ➔ ➔</button>
+    </div>
+    <script>
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
+
+        let progress = 0;
+
+        // Canvas an Bildschirmgröße anpassen
+        function resizeCanvas() {
+            const size = Math.min(window.innerWidth * 0.8, 350);
+
+            canvas.width = size;
+            canvas.height = size;
+        }
+
+        resizeCanvas();
+
+        window.addEventListener("resize", resizeCanvas);
+
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            ctx.beginPath();
+
+            // Herzgröße
+            const scale = canvas.width / 40;
+
+            for (let t = 0; t <= progress; t += 0.01) {
+
+                const x = 16 * Math.sin(t) ** 3;
+
+                const y = -(13 * Math.cos(t)
+                        - 5 * Math.cos(2 * t)
+                        - 2 * Math.cos(3 * t)
+                        - Math.cos(4 * t));
+
+                const canvasX = canvas.width / 2 + x * scale;
+                const canvasY = canvas.height / 2 + y * scale;
+
+                if (t === 0) {
+                    ctx.moveTo(canvasX, canvasY);
+                } else {
+                    ctx.lineTo(canvasX, canvasY);
+                }
+            }
+
+            ctx.strokeStyle = "#e63946";
+            ctx.lineWidth = 4;
+            ctx.lineCap = "round";
+
+            ctx.stroke();
+
+            progress += 0.015;
+
+            if (progress < Math.PI * 2) {
+                requestAnimationFrame(draw);
+            }
+        }
+
+        draw();
+
+        function show(text){
+            text.style.display = "block";
+        }
+
+        let current_text = 1;
+
+        function next(){
+            let text = document.getElementById("t" + current_text)
+            current_text++;
+            show(text);
+            if(current_text >= 5){
+                document.getElementById("final_btn").style.display = "block";
+                document.getElementById("btn").style.display = "none";
+            }
+        }
+
+        function next_page(){
+            window.location.href = "rose.html";
+        }
+    </script>
+</body>
+
+
+</html>

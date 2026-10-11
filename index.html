@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Quicksand:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Averia+Libre:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Cause:wght@100..900&family=Chango&family=Coiny&family=Comic+Neue:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Kurale&family=Londrina+Solid:wght@100;300;400;900&family=Oleo+Script:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: #fff5f7;
+            font-family: "Cause", cursive;
+            text-align: center;
+        }
+        canvas {
+            width: min(95vw, 600px);
+            height: min(95vw, 600px);
+
+            cursor: pointer;
+        }
+        #container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        h1 {
+            text-align: center;
+            font-family: "Great Vibes", cursive;
+            font-size: clamp(3rem, 12vw, 5rem);
+            font-weight: 400;
+        }
+        .text {
+            font-family: "Cause", cursive;
+            font-size: 20px;
+            text-align: center;
+            margin: 10px;
+        }
+        .btn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        button {
+            text-align: center;
+            margin: 10px;
+            font-family: "Cause", cursive;
+            font-size: 20px;
+            padding: 10px;
+            padding-right: 30px;
+            padding-left: 30px;
+            background: #e63946;
+            border-width: 5px;
+            border-color: #e63946;
+            border-radius: 10%;
+            color: white;
+        }
+    </style>
+    <title>♡</title>
+</head>
+
+<body>
+    <header>
+        <h1>Öffne den Brief ☺︎</h1>
+    </header>
+    <div class="container">
+        <canvas id="canvas"></canvas>
+    </div>
+    <div class="btn">
+        <button id="btn" onclick="next()">Öffnen</button>
+    </div>
+    <div class="btn">
+        <button style="display: none;" id="final_btn" onclick="next_page()">➔ ➔ ➔</button>
+    </div>
+    <div id="t1" style="display: none">▒▒▒▒▒▒▒▒▒▒ 0%</div>
+    <script>
+        function wait(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        async function next() {
+            document.getElementById("btn").style.display = "none"
+            await wait(1000);
+            document.getElementById("t1").style.display = "block"
+            await wait(1000);
+            document.getElementById("t1").innerText = "█▒▒▒▒▒▒▒▒▒ 10%"
+            await wait(1000);
+            document.getElementById("t1").innerText = "██▒▒▒▒▒▒▒▒ 20%"
+            await wait(1000);
+            document.getElementById("t1").innerText = "███▒▒▒▒▒▒▒ 30%"
+            await wait(1000);
+            document.getElementById("t1").innerText = "████▒▒▒▒▒▒ 40%"
+            await wait(1000);
+            document.getElementById("t1").innerText = "█████▒▒▒▒▒ 50%"
+            await wait(1000);
+            document.getElementById("t1").innerText = "██████▒▒▒▒ 60%"
+            await wait(1000);
+            document.getElementById("t1").innerText = "███████▒▒▒ 70%"
+            await wait(1000);
+            document.getElementById("t1").innerText = "████████▒▒ 80%"
+            await wait(1000);
+            document.getElementById("t1").innerText = "█████████▒ 90%"
+            await wait(5000);
+            document.getElementById("t1").innerText = "██████████ 100%"
+            await wait(1000);
+            window.location.href = "start.html";
+        }
+
+
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
+
+
+        // =====================================
+        // CANVAS
+        // =====================================
+
+        function resizeCanvas() {
+
+            const size = Math.min(
+                window.innerWidth * 0.9,
+                500
+            );
+
+            canvas.width = size;
+            canvas.height = size;
+
+        }
+
+        resizeCanvas();
+
+        window.addEventListener("resize", () => {
+            resizeCanvas();
+            drawEnvelope();
+        });
+
+
+        // =====================================
+        // BRIEF ZEICHNEN
+        // =====================================
+
+        function drawEnvelope() {
+
+            ctx.clearRect(
+                0,
+                0,
+                canvas.width,
+                canvas.height
+            );
+
+
+            // Größe
+
+            const width =
+                canvas.width * 0.68;
+
+            const height =
+                width * 0.52;
+
+
+            const x =
+                canvas.width / 2 -
+                width / 2;
+
+            const y =
+                canvas.height / 2 -
+                height / 2;
+
+
+            // =================================
+            // SCHATTEN
+            // =================================
+
+            ctx.save();
+
+            ctx.shadowColor =
+                "rgba(80, 30, 40, 0.18)";
+
+            ctx.shadowBlur = 25;
+
+            ctx.shadowOffsetY = 12;
+
+
+            ctx.fillStyle =
+                "#fffdfd";
+
+
+            ctx.beginPath();
+
+            ctx.roundRect(
+                x,
+                y,
+                width,
+                height,
+                10
+            );
+
+            ctx.fill();
+
+            ctx.restore();
+
+
+            // =================================
+            // UMSCHLAG
+            // =================================
+
+            ctx.fillStyle =
+                "#fffdfd";
+
+            ctx.strokeStyle =
+                "#e7c9ce";
+
+            ctx.lineWidth = 2;
+
+
+            ctx.beginPath();
+
+            ctx.roundRect(
+                x,
+                y,
+                width,
+                height,
+                10
+            );
+
+            ctx.fill();
+            ctx.stroke();
+
+
+            // =================================
+            // SEITLICHE FALTEN
+            // =================================
+
+            ctx.strokeStyle =
+                "#edcfd4";
+
+            ctx.lineWidth = 2;
+
+
+            // links
+
+            ctx.beginPath();
+
+            ctx.moveTo(
+                x,
+                y + height
+            );
+
+            ctx.lineTo(
+                x + width * 0.30,
+                y + height * 0.52
+            );
+
+            ctx.stroke();
+
+
+            // rechts
+
+            ctx.beginPath();
+
+            ctx.moveTo(
+                x + width,
+                y + height
+            );
+
+            ctx.lineTo(
+                x + width * 0.70,
+                y + height * 0.52
+            );
+
+            ctx.stroke();
+
+
+            // =================================
+            // OBERE KLAPPE
+            // =================================
+
+            ctx.beginPath();
+
+            ctx.moveTo(
+                x,
+                y
+            );
+
+            ctx.lineTo(
+                x + width / 2,
+                y + height * 0.52
+            );
+
+            ctx.lineTo(
+                x + width,
+                y
+            );
+
+            ctx.closePath();
+
+
+            ctx.fillStyle =
+                "#fffafa";
+
+            ctx.strokeStyle =
+                "#e7c9ce";
+
+            ctx.lineWidth = 2;
+
+
+            ctx.fill();
+            ctx.stroke();
+
+
+            // =================================
+            // HERZ
+            // =================================
+
+            ctx.save();
+
+            ctx.fillStyle =
+                "#e63946";
+
+            ctx.font =
+                `${width * 0.13}px Arial`;
+
+            ctx.textAlign =
+                "center";
+
+            ctx.textBaseline =
+                "middle";
+
+
+            ctx.fillText(
+                "♥",
+                canvas.width / 2,
+                y + height * 0.63
+            );
+
+
+            ctx.restore();
+
+        }
+
+
+        // =====================================
+        // START
+        // =====================================
+
+        drawEnvelope();
+    </script>
+</body>
+
+
+</html>
